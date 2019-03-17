@@ -9,6 +9,11 @@ apt-get -y install apt-transport-https \
      ca-certificates \
      curl \
      gnupg2 \
+     python-setuptools \
+     jq \
+     build-essential \
+     python-pip \
+     groff-base \
      software-properties-common && \
 curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg > /tmp/dkey; apt-key add /tmp/dkey && \
 add-apt-repository \
@@ -17,7 +22,10 @@ add-apt-repository \
    stable" && \
 apt-get update && \
 apt-get -y install docker-ce && \
-groupadd -g 497 docker && \
-gpasswd -a jenkins docker
+pip install awscli && \
+apt-get clean apt-get purge && \
+rm -rf /var/lib/apt/lists/*
+
+RUN usermod -a -G docker jenkins
 
 USER jenkins
